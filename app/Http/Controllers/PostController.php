@@ -14,15 +14,36 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if(trim($request->search) == ""){
+            return response([
+                'posts' => Post::orderBy('created_at', 'desc')->with('user:id,name,image')->withCount('comment', 'like')
+                ->with('like',function($like){
+                    return $like->where('user_id',auth()->user()->id)->select('id','user_id','post_id')->get();
+                })
+                ->get()
+            ], 200);
+        }
+
+        $search =   $request->search;
+
         return response([
-            'posts' => Post::orderBy('created_at', 'desc')->with('user:id,name,image')->withCount('comment', 'like')
+            'posts' => Post::orderBy('created_at', 'desc')->where('body','like',"%{$search}%")->with('user:id,name,image')->withCount('comment', 'like')
             ->with('like',function($like){
                 return $like->where('user_id',auth()->user()->id)->select('id','user_id','post_id')->get();
             })
             ->get()
         ], 200);
+        //  return response([
+        //     'posts' => Post::orderBy('created_at', 'desc')->with('user:id,name,image')->withCount('comment', 'like')
+        //     ->with('like',function($like){
+        //         return $like->where('user_id',auth()->user()->id)->select('id','user_id','post_id')->get();
+        //     })
+        //     ->get()
+        // ], 200);
+
     }
 
     /**
