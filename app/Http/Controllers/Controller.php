@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\URL;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    public function saveImage( $image,$path = 'public')
+    public function saveImage( $image,$path = 's3')
     {
        if(!$image)
        {
