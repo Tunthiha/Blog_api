@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Like;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostController extends Controller
@@ -16,6 +18,18 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
+        // $like_posts = Like::where('user_id',auth()->user()->id)->get();
+        // foreach($like_posts as $like_post ){
+        //     $postid[]=$like_post->post_id;
+        // }
+        // $bookmark = Post::orderBy('created_at', 'desc')->with('like', function($like){
+        //     return $like->where('user_id',auth()->user()->id)->get();
+        // })->get();
+
+        // $bookmark = Like::where('user_id',auth()->user()->id)->get();
+        // //dd($bookmark);
+        // $posts_ByUser = Post::whereIn('id',$postid)->get();
+         //return response(['postsByUser' => $bookmark]);
 
         if(trim($request->search) == ""){
             return response([
@@ -135,6 +149,14 @@ class PostController extends Controller
         ]);
         if($request->image){
 
+
+
+            if($post->image){
+                //delete image from public/posts
+                $pathinfo = pathinfo($post->image);
+                Storage::disk('public')->delete('/posts/'.$pathinfo['filename'].'.'.$pathinfo['extension']);
+            }
+
             $image = $this->saveImage($request->image, 'posts');
             $post->update([
                 'body'=>$attrs['body'],
@@ -168,6 +190,11 @@ class PostController extends Controller
     public function destroy( $id)
     {
         $post = Post::find($id);
+        if($post->image){
+            //delete image from public/posts
+            $pathinfo = pathinfo($post->image);
+            Storage::disk('public')->delete('/posts/'.$pathinfo['filename'].'.'.$pathinfo['extension']);
+        }
         if(!$post)
         {
             return response([

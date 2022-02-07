@@ -22,7 +22,7 @@ class Controller extends BaseController
        $filename=time().'.png';
     //    Storage::disk($path)->put($filename, base64_decode($image));
 
-    Storage::disk($path)->put($filename,base64_decode($image));
+        Storage::disk($path)->put($filename,base64_decode($image));
 
        return URL::to('/').'/storage/'.$path.'/'.$filename;
     }
