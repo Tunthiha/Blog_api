@@ -83,6 +83,7 @@ class PostController extends Controller
         ]);
 
         $image = $this->saveImage($request->image, 'posts');
+
         //dd($image);
         $post = Post::create([
             'body' => $attrs['body'],
