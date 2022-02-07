@@ -82,7 +82,7 @@ class PostController extends Controller
             'body' => 'required|string'
         ]);
 
-        $image = $this->saveImage($request->image, 'posts');
+        $image = $this->saveImage($request->image, 's3');
 
         //dd($image);
         $post = Post::create([
