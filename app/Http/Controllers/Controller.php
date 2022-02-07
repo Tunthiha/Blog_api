@@ -13,18 +13,17 @@ use Illuminate\Support\Facades\Storage;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    public function saveImage( $image,$path = 's3')
+    public function saveImage( $image,$path  )
     {
        if(!$image)
        {
            return null;
        }
        $filename=time().'.png';
-    //    Storage::disk($path)->put($filename, base64_decode($image));
+       Storage::disk($path)->put($filename, base64_decode($image));
+       $img = base64_decode($image);
 
-        Storage::disk($path)->put($filename,fopen($image,'r+'),'public');
-
-
+        //Storage::disk($path)->put($filename,fopen($img,'r+'),'public');
         $url = Storage::disk($path)->url($filename);
        return $url;
     }
