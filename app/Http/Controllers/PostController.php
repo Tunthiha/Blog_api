@@ -154,11 +154,11 @@ class PostController extends Controller
 
             if($post->image){
                 //delete image from public/posts
-                $pathinfo = pathinfo($post->image);
-                Storage::disk('public')->delete('/posts/'.$pathinfo['filename'].'.'.$pathinfo['extension']);
+                //$pathinfo = pathinfo($post->image);
+                //Storage::disk('s3')->delete('/posts/'.$pathinfo['filename'].'.'.$pathinfo['extension']);
             }
 
-            $image = $this->saveImage($request->image, 'posts');
+            $image = $this->saveImage($request->image, 's3');
             $post->update([
                 'body'=>$attrs['body'],
 
