@@ -67,6 +67,13 @@ class PostController extends Controller
         // ], 200);
 
     }
+    public function bookmark(){
+        return response([
+            'posts' => Post::orderBy('created_at','desc')->with('user:id,name,image')->wherehas('like',function($q){
+                return $q->where('user_id',auth()->user()->id);
+            })->get()
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

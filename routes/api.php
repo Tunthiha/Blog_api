@@ -29,8 +29,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/posts','PostController@index');
     Route::post('/posts','PostController@store');
     Route::get('/posts/{id}','PostController@show');
+    Route::get('/posts/hello','PostController@hello')->name('hello');
     Route::put('/posts/{id}','PostController@update');
     Route::delete('/posts/{id}','PostController@destroy');
+    Route::get('/posts/{user}/bookmarks','PostController@bookmark');
 
     // Comment
     Route::get('/posts/{id}/comments','CommentController@index'); // all comments of a post
