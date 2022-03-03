@@ -69,7 +69,10 @@ class PostController extends Controller
     }
     public function bookmark(){
         return response([
-            'posts' => Post::orderBy('created_at','desc')->with('user:id,name,image')->wherehas('like',function($q){
+            'posts' => Post::orderBy('created_at','desc')->with('user:id,name,image')->withCount('comment', 'like')
+            ->with('like',function($like){
+                return $like->where('user_id',auth()->user()->id)->select('id','user_id','post_id')->get();
+            })->wherehas('like',function($q){
                 return $q->where('user_id',auth()->user()->id);
             })->get()
         ]);
